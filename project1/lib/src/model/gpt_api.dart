@@ -1,11 +1,17 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 import 'package:project1/src/controller/main_type_controller.dart';
 import 'package:project1/src/controller/setting.dart';
 
 class GPTApi {
   static String apiKey = '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';
+
+  static String opacityToHex(double opacity) {
+    int alpha = (opacity * 255).round();
+    String alphaHex = alpha.toRadixString(16).padLeft(2, '0').toUpperCase();
+    return alphaHex;
+  }
 
   static Future<List<String>> getGPTResponse(
       {required String prompt,
@@ -63,6 +69,13 @@ class GPTApi {
           .replaceAll("]", "")
           .replaceAll("'", "")
           .split(", ");
+      if (opacity != null && opacity != 1.0) {
+        result = result.map((color) {
+          String rgbaColor = color.substring(1, 7);
+          String alphaChannel = opacityToHex(opacity);
+          return "#$alphaChannel$rgbaColor";
+        }).toList();
+      }
       return result;
     } else {
       throw Exception('Failed to load response : ${response.statusCode}');
@@ -70,55 +83,104 @@ class GPTApi {
   }
 
   static Future<List<dynamic>> getColorFeatures(List<String> colorList) async {
-    String newPrompt = "UI/UX 디자이너의 관점에서 다음 제시되는 색상에 대해 중요도(%)와 알맞는 역할을 정해줘.\n";
-    newPrompt +=
-        "역할은 'primary color', 'secondary color', 'background color', 'text color', 'accent color' 등이 될 수 있으며 어울리는 것과 매치되어야 해.\n";
-    newPrompt += "색상은 다음과 같아 : ";
+    final List<String> roles = [
+      'primary color',
+      'secondary color',
+      'background color',
+      'text color',
+      'accent color'
+    ];
+    final Random random = Random();
+
+    List<dynamic> result = [];
+    int totalPercentage = 100;
+    int remainingColors = colorList.length;
+
+    bool primaryColorSelected = false;
+
     for (int i = 0; i < colorList.length; i++) {
-      newPrompt += colorList[i];
-      if (i != colorList.length - 1) {
-        newPrompt += ", ";
-      }
-    }
-    newPrompt += "\n";
-    newPrompt +=
-        "출력 포멧은 무조건 다음을 따라야 해. 즉, json으로 꼭 인코딩할 수 있어야 해. ex) [{'color': '#ffffff', 'percentage': 60, 'role': 'primary color'}, {'color': '#000000', 'percentage': 40, 'role': 'background color'}]";
+      int maxPercentage = (totalPercentage / remainingColors).floor();
+      int percentage = (i == colorList.length - 1)
+          ? totalPercentage
+          : random.nextInt(maxPercentage - 4) + 5;
+      totalPercentage -= percentage;
+      remainingColors--;
 
-    try {
-      var response = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $apiKey',
-        },
-        body: jsonEncode({
-          "model":
-              "gpt-3.5-turbo-0125", //gpt-4-turbo-preview or gpt-3.5-turbo-0125
-          "messages": [
-            {"role": "system", "content": "User: $newPrompt"},
-            {"role": "user", "content": "Generate"},
-          ],
-          "temperature": 0.5,
-          "top_p": 1,
-          "n": 1,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
-        String content = data['choices'][0]['message']['content'];
-        var result = jsonDecode(content);
-        if (result is List<dynamic>) {
-          return result;
-        } else {
-          throw Exception('Failed to load response : ${response.statusCode}');
-        }
+      if (!primaryColorSelected &&
+          ((i == colorList.length - 1) ||
+              (remainingColors == 1) ||
+              (i > 0 && result[i - 1]['role'] != 'primary color'))) {
+        result.add({
+          'color': colorList[i],
+          'percentage': percentage,
+          'role': 'primary color',
+        });
+        primaryColorSelected = true;
       } else {
-        throw Exception('Failed to load response : ${response.statusCode}');
+        String role = roles.firstWhere(
+            (role) =>
+                role != 'primary color' &&
+                !result.any((color) => color['role'] == role),
+            orElse: () => roles[random.nextInt(roles.length)]);
+        result.add({
+          'color': colorList[i],
+          'percentage': percentage,
+          'role': role,
+        });
       }
-    } catch (e) {
-      Logger().e(e);
-      throw Exception('An error occurred while processing the request');
     }
+
+    return result;
   }
+
+  // static Future<List<dynamic>> getColorFeatures(List<String> colorList) async {
+  //   String newPrompt = "UI/UX 디자이너의 관점에서 다음 제시되는 색상에 대해 중요도(%)와 알맞는 역할을 정해줘.\n";
+  //   newPrompt +=
+  //       "역할은 'primary color', 'secondary color', 'background color', 'text color', 'accent color' 등이 될 수 있으며 어울리는 것과 매치되어야 해.\n";
+  //   newPrompt += "색상은 다음과 같아 : ";
+  //   for (int i = 0; i < colorList.length; i++) {
+  //     newPrompt += colorList[i];
+  //     if (i != colorList.length - 1) {
+  //       newPrompt += ", ";
+  //     }
+  //   }
+  //   newPrompt += "\n";
+  //   newPrompt +=
+  //       "출력 포멧은 무조건 다음을 따라야 해. 즉, json으로 꼭 인코딩할 수 있어야 해. ex) [{'color': '#ffffff', 'percentage': 60, 'role': 'primary color'}, {'color': '#000000', 'percentage': 40, 'role': 'background color'}]";
+  //   try {
+  //     var response = await http.post(
+  //       Uri.parse('https://api.openai.com/v1/chat/completions'),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'Bearer $apiKey',
+  //       },
+  //       body: jsonEncode({
+  //         "model":
+  //             "gpt-3.5-turbo-0125", //gpt-4-turbo-preview or gpt-3.5-turbo-0125
+  //         "messages": [
+  //           {"role": "system", "content": "User: $newPrompt"},
+  //           {"role": "user", "content": "Generate"},
+  //         ],
+  //         "temperature": 0.5,
+  //         "top_p": 1,
+  //         "n": 1,
+  //       }),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       Map<String, dynamic> data = jsonDecode(response.body);
+  //       String content = data['choices'][0]['message']['content'];
+  //       var result = jsonDecode(content);
+  //       if (result is List<dynamic>) {
+  //         return result;
+  //       } else {
+  //         throw Exception('Failed to load response : ${response.statusCode}');
+  //       }
+  //     } else {
+  //       throw Exception('Failed to load response : ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     Logger().e(e);
+  //     throw Exception('An error occurred while processing the request');
+  //   }
+  // }
 }
