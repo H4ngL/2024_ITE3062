@@ -5,6 +5,7 @@ import 'package:project1/src/controller/main_type_controller.dart';
 import 'package:project1/src/controller/palette_controller.dart';
 import 'package:project1/src/controller/screen_layout_controller.dart';
 import 'package:project1/src/controller/setting.dart';
+import 'package:project1/src/firebase/firestore.dart';
 import 'package:project1/src/model/gpt_api.dart';
 import 'package:project1/src/screens/contents/advanced_settings.dart';
 import 'package:project1/src/screens/contents/main_setting.dart';
@@ -92,6 +93,7 @@ class _ContentState extends State<Content> {
                       setState(() {
                         isAdvancedSettingsEnabled = value;
                       });
+                      Firestore.logAdvancedSettings(value);
                     },
                   ),
                   const SizedBox(width: 8),
@@ -145,6 +147,7 @@ class _ContentState extends State<Content> {
                       });
                     });
                   }
+                  Firestore.logGenerate();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

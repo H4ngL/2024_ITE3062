@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:project1/src/controller/main_type_controller.dart';
+import 'package:project1/src/firebase/firestore.dart';
 import 'package:project1/src/screens/contents/custom_dropdown.dart';
 
 class MainSetting extends StatefulWidget {
@@ -199,6 +200,7 @@ class _MainSettingState extends State<MainSetting> {
                 if (value == '중심 색상') {
                   widget.textController.text = '#2196F3';
                 }
+                Firestore.logMainType(value);
               },
               width: 150,
               height: 52,

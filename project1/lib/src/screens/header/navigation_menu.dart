@@ -92,7 +92,7 @@ class NavigationMenu extends GetView<ScreenLayoutController> {
             );
           },
         ),
-        const SizedBox(width: 20),
+        const SizedBox(width: 10),
         MenuButton(
           menu: '처음으로',
           onTap: () async {
