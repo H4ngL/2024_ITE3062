@@ -150,7 +150,7 @@ class _ContentState extends State<Content> {
                   backgroundColor: Colors.blue,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
-                    vertical: 20,
+                    vertical: 22,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
