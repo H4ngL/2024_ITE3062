@@ -89,6 +89,7 @@ class ResultPalette extends StatelessWidget {
                 thumbVisibility: true,
                 child: SingleChildScrollView(
                   controller: _scrollController,
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       const Padding(

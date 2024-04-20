@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project1/src/controller/setting.dart';
+import 'package:project1/src/firebase/firestore.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class AdvancedSettings extends StatefulWidget {
@@ -42,6 +43,9 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                 settings.setColorCount(value.toInt());
               });
             },
+            onChangeEnd: (value) {
+              Firestore.logAdvancedSettingsColorCount(value.toInt());
+            },
             min: 2,
             max: 10,
             stepSize: 1,
@@ -72,6 +76,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                     setState(() {
                       settings.setColorMix(value!);
                     });
+                    Firestore.logAdvancedSettingsColorMix(value!);
                   },
                 ),
               ),
@@ -83,6 +88,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                   onChanged: (ColorMix? value) {
                     setState(() {
                       settings.setColorMix(value!);
+                      Firestore.logAdvancedSettingsColorMix(value);
                     });
                   },
                 ),
@@ -95,6 +101,7 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
                   onChanged: (ColorMix? value) {
                     setState(() {
                       settings.setColorMix(value!);
+                      Firestore.logAdvancedSettingsColorMix(value);
                     });
                   },
                 ),
@@ -116,6 +123,9 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
               setState(() {
                 settings.setOpacity(value / 100);
               });
+            },
+            onChangeEnd: (value) {
+              Firestore.logAdvancedSettingsOpacity(value / 100);
             },
             min: 0,
             max: 100,

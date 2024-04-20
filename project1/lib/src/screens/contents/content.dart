@@ -40,9 +40,10 @@ class _ContentState extends State<Content> {
 
     return Scrollbar(
       controller: _scrollController,
-      thumbVisibility: true,
+      thumbVisibility: !widget.vertical,
       child: SingleChildScrollView(
         controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.only(right: 20),
           child: Column(
