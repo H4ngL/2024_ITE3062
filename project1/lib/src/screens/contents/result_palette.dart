@@ -4,6 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:project1/src/controller/loading_controller.dart';
 import 'package:project1/src/controller/palette_controller.dart';
 import 'package:project1/src/screens/contents/color_palette.dart';
+import 'package:project1/src/screens/contents/custom_tooltip.dart';
 
 class ResultPalette extends StatelessWidget {
   ResultPalette({
@@ -107,36 +108,60 @@ class ResultPalette extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '1. Default Palette',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[600],
-                              ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '1. Default Palette',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                const CustomTooltip(
+                                  content: "색상 코드만을 추천받을 수 있습니다",
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 20),
                             ColorPalette(colors: controller.colors),
                             const SizedBox(height: 20),
-                            Text(
-                              '2. Palette with Percentage',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[600],
-                              ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '2. Palette with Percentage',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                const CustomTooltip(
+                                  content: "색상 코드와 사용 비율을 추천받을 수 있습니다",
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 20),
                             ColorPaletteWithPercentage(
                                 colors: controller.colorFeature),
                             const SizedBox(height: 20),
-                            Text(
-                              '3. Palette with Name',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[600],
-                              ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '3. Palette with Name',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                const CustomTooltip(
+                                  content: "색상 코드와 역할을 추천받을 수 있습니다",
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 20),
                             ColorPaletteWithName(

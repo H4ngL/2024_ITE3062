@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Coloring',
+      title: 'COLORING',
       theme: ThemeData(
         fontFamily: 'Pretendard',
         useMaterial3: false,

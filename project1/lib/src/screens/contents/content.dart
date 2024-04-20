@@ -31,6 +31,11 @@ class _ContentState extends State<Content> {
   final TextEditingController _textController = TextEditingController();
   bool isAdvancedSettingsEnabled = false;
 
+  bool _isValidColorCode(String value) {
+    final validColorRegExp = RegExp(r'^#[0-9a-fA-F]{6}$');
+    return validColorRegExp.hasMatch(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     Get.put(PaletteController());
@@ -116,10 +121,74 @@ class _ContentState extends State<Content> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
+                  MainType type = Get.find<MainTypeController>().mainType.value;
+                  if (_textController.text.isEmpty) {
+                    if (type == MainType.prompt &&
+                        _textController.text.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('알림'),
+                            content: const Text('프롬프트를 입력해 주세요.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('확인'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else if (type == MainType.code) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('알림'),
+                            content: const Text('색상 코드를 입력해 주세요.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('확인'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    return;
+                  }
+
+                  if (type == MainType.code &&
+                      _isValidColorCode(_textController.text) == false) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('알림'),
+                          content: const Text(
+                              '색상 코드 형식이 올바르지 않습니다.\n색상 코드는 #으로 시작하며 6자리의 16진수 숫자로 이루어지는 HEX 코드입니다.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('확인'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    return;
+                  }
+
                   if (!isAdvancedSettingsEnabled) {
                     Get.find<LoadingController>().changeLoadingState(true);
-                    MainType type =
-                        Get.find<MainTypeController>().mainType.value;
                     GPTApi.getGPTResponse(
                       prompt: _textController.text,
                       type: type,
@@ -132,8 +201,6 @@ class _ContentState extends State<Content> {
                     });
                   } else {
                     Get.find<LoadingController>().changeLoadingState(true);
-                    MainType type =
-                        Get.find<MainTypeController>().mainType.value;
                     GPTApi.getGPTResponse(
                       prompt: _textController.text,
                       type: type,

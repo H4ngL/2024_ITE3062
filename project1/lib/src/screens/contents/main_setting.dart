@@ -128,7 +128,7 @@ class _MainSettingState extends State<MainSetting> {
       child: TextFormField(
         controller: widget.textController,
         decoration: InputDecoration(
-          constraints: const BoxConstraints(maxWidth: 200),
+          constraints: const BoxConstraints(maxWidth: 180),
           hintText: '색상 코드를 입력하세요',
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),

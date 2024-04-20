@@ -89,11 +89,26 @@ class LoginPage extends StatelessWidget {
                       obscureText: false,
                     ),
                     const SizedBox(height: 5),
-                    Text(
-                      '* 식별을 위해서만 사용되며 본명일 필요는 없습니다.',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[600],
+                    Text.rich(
+                      TextSpan(
+                        text: '',
+                        children: [
+                          const TextSpan(
+                            text: '* ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.red,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                '식별을 위해서만 사용되며 본명일 필요는 없습니다. 단, 설문지에 입력한 이름과 동일하게 입력해 주세요.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
