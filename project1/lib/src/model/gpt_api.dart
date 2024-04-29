@@ -50,7 +50,7 @@ class GPTApi {
       },
       body: jsonEncode({
         "model":
-            "gpt-3.5-turbo-0125", //gpt-4-turbo-preview or gpt-3.5-turbo-0125
+            "gpt-4-turbo-preview", //gpt-4-turbo-preview or gpt-3.5-turbo-0125
         "messages": [
           {"role": "system", "content": "User: $newPrompt"},
           {"role": "user", "content": "Generate"},

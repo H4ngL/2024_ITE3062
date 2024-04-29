@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:project1/src/controller/loading_controller.dart';
 import 'package:project1/src/controller/palette_controller.dart';
+import 'package:project1/src/firebase/firestore.dart';
 import 'package:project1/src/screens/contents/color_palette.dart';
 import 'package:project1/src/screens/contents/custom_tooltip.dart';
 
@@ -122,6 +124,28 @@ class ResultPalette extends StatelessWidget {
                                 const CustomTooltip(
                                   content: "색상 코드만을 추천받을 수 있습니다",
                                 ),
+                                IconButton(
+                                  tooltip: "결과 복사",
+                                  onPressed: () {
+                                    String colors = "1번 팔레트: ";
+                                    colors += controller.colors
+                                        .map((color) => color.toString())
+                                        .join(', ');
+                                    Clipboard.setData(
+                                        ClipboardData(text: colors));
+                                    const snackBar = SnackBar(
+                                      width: 400,
+                                      content: Text('1번 팔레트가 클립보드에 복사되었습니다',
+                                          textAlign: TextAlign.center),
+                                      behavior: SnackBarBehavior.floating,
+                                      duration: Duration(milliseconds: 500),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    Firestore.logPaletteCopy('1번');
+                                  },
+                                  icon: const Icon(Icons.copy),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 20),
@@ -141,6 +165,33 @@ class ResultPalette extends StatelessWidget {
                                 const CustomTooltip(
                                   content: "색상 코드와 사용 비율을 추천받을 수 있습니다",
                                 ),
+                                IconButton(
+                                  tooltip: "결과 복사",
+                                  onPressed: () {
+                                    String colors = "2번 팔레트 : ";
+                                    colors +=
+                                        controller.colorFeature.map((color) {
+                                      String ret = color['color'].toString();
+                                      ret += '(';
+                                      ret += color['percentage'].toString();
+                                      ret += '%)';
+                                      return ret;
+                                    }).join(', ');
+                                    Clipboard.setData(
+                                        ClipboardData(text: colors));
+                                    const snackBar = SnackBar(
+                                      width: 400,
+                                      content: Text('2번 팔레트가 클립보드에 복사되었습니다',
+                                          textAlign: TextAlign.center),
+                                      behavior: SnackBarBehavior.floating,
+                                      duration: Duration(milliseconds: 500),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    Firestore.logPaletteCopy('2번');
+                                  },
+                                  icon: const Icon(Icons.copy),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 20),
@@ -151,7 +202,7 @@ class ResultPalette extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '3. Palette with Name',
+                                  '3. Palette with Role',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
@@ -160,6 +211,33 @@ class ResultPalette extends StatelessWidget {
                                 ),
                                 const CustomTooltip(
                                   content: "색상 코드와 역할을 추천받을 수 있습니다",
+                                ),
+                                IconButton(
+                                  tooltip: "결과 복사",
+                                  onPressed: () {
+                                    String colors = "3번 팔레트 : ";
+                                    colors +=
+                                        controller.colorFeature.map((color) {
+                                      String ret = color['color'].toString();
+                                      ret += '(';
+                                      ret += color['role'].toString();
+                                      ret += ')';
+                                      return ret;
+                                    }).join(', ');
+                                    Clipboard.setData(
+                                        ClipboardData(text: colors));
+                                    const snackBar = SnackBar(
+                                      width: 400,
+                                      content: Text('3번 팔레트가 클립보드에 복사되었습니다',
+                                          textAlign: TextAlign.center),
+                                      behavior: SnackBarBehavior.floating,
+                                      duration: Duration(milliseconds: 500),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    Firestore.logPaletteCopy('3번');
+                                  },
+                                  icon: const Icon(Icons.copy),
                                 ),
                               ],
                             ),

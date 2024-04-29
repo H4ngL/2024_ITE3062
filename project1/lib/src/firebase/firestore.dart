@@ -10,10 +10,27 @@ class Firestore {
       _firestore.collection('user').doc(Auth.currentUser!.uid).set({
         'name': name,
       });
+      _firestore.collection('admin').doc('info').set({
+        'userNames': FieldValue.arrayUnion([name]),
+      }, SetOptions(merge: true));
     }
   }
 
-  // log main type
+  static Future<bool> isDuplicatedName(String name) async {
+    final snapshot = await _firestore.collection('admin').doc('info').get();
+    if (!snapshot.exists) return false;
+    final userNames = snapshot.data()!['userNames'] as List<dynamic>;
+    return userNames.contains(name);
+  }
+
+  static void addLogNum() {
+    if (Auth.isSignedIn) {
+      _firestore.collection('user').doc(Auth.currentUser!.uid).set({
+        'logNum': FieldValue.increment(1),
+      }, SetOptions(merge: true));
+    }
+  }
+
   static void logMainType(String mainType) {
     if (Auth.isSignedIn) {
       _firestore
@@ -26,10 +43,10 @@ class Firestore {
         'action': 'change main type',
         'mainType': mainType,
       });
+      addLogNum();
     }
   }
 
-  // log advanced settings
   static void logAdvancedSettings(bool isChecked) {
     if (Auth.isSignedIn) {
       _firestore
@@ -42,6 +59,7 @@ class Firestore {
         'action': 'check advanced settings',
         'isChecked': isChecked,
       });
+      addLogNum();
     }
   }
 
@@ -57,6 +75,7 @@ class Firestore {
         'action': 'change color count',
         'colorCount': colorCount,
       });
+      addLogNum();
     }
   }
 
@@ -72,6 +91,7 @@ class Firestore {
         'action': 'check color mixing',
         'colorMix': colorMix.toString().split('.').last,
       });
+      addLogNum();
     }
   }
 
@@ -87,10 +107,10 @@ class Firestore {
         'action': 'change opacity',
         'opacity': opacity,
       });
+      addLogNum();
     }
   }
 
-  // log generate
   static void logGenerate() {
     if (Auth.isSignedIn) {
       _firestore
@@ -102,8 +122,23 @@ class Firestore {
         'timestamp': FieldValue.serverTimestamp(),
         'action': 'generate',
       });
+      addLogNum();
     }
   }
 
-  // palette copy
+  static void logPaletteCopy(String type) {
+    if (Auth.isSignedIn) {
+      _firestore
+          .collection('user')
+          .doc(Auth.currentUser!.uid)
+          .collection('logs')
+          .doc()
+          .set({
+        'timestamp': FieldValue.serverTimestamp(),
+        'action': 'copy palette',
+        'type': type,
+      });
+      addLogNum();
+    }
+  }
 }

@@ -103,45 +103,47 @@ class ColorPaletteWithName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 420,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: colors.map((color) {
-          final String hexColor = color['color'];
-          final String name = color['role'];
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(5)),
+      child: SizedBox(
+        width: 420,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: colors.map((color) {
+            final String hexColor = color['color'];
+            final String name = color['role'];
 
-          return InkWell(
-            onTap: () {
-              Clipboard.setData(ClipboardData(text: hexColor));
-              final snackBar = SnackBar(
-                width: 400,
-                content: Text('$hexColor가 클립보드에 복사되었습니다',
-                    textAlign: TextAlign.center),
-                behavior: SnackBarBehavior.floating,
-                duration: const Duration(milliseconds: 500),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: HexColor(hexColor),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: Text(
-                  name,
-                  style: TextStyle(
-                    color:
-                        (hexColor == "#ffffff") ? Colors.black : Colors.white,
-                    fontWeight: FontWeight.bold,
+            return InkWell(
+              onTap: () {
+                Clipboard.setData(ClipboardData(text: hexColor));
+                final snackBar = SnackBar(
+                  width: 400,
+                  content: Text('$hexColor가 클립보드에 복사되었습니다',
+                      textAlign: TextAlign.center),
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(milliseconds: 500),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: HexColor(hexColor),
+                ),
+                child: Center(
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      color:
+                          (hexColor == "#ffffff") ? Colors.black : Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        }).toList(),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

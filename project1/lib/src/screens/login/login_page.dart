@@ -120,12 +120,36 @@ class LoginPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_controller.text.isNotEmpty) {
-                        await Auth.signInAnonymously().then((value) {
-                          if (value != null) {
-                            Firestore.addName(_controller.text);
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const HomePage()));
+                        await Firestore.isDuplicatedName(_controller.text)
+                            .then((value) {
+                          if (value) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('알림'),
+                                  content: const Text('이미 사용 중인 이름입니다.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('확인'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            Auth.signInAnonymously().then((value) {
+                              if (value != null) {
+                                Firestore.addName(_controller.text);
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomePage()));
+                              }
+                            });
                           }
                         });
                       } else {
