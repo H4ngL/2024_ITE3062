@@ -46,8 +46,8 @@ class _AdvancedSettingsState extends State<AdvancedSettings> {
             onChangeEnd: (value) {
               Firestore.logAdvancedSettingsColorCount(value.toInt());
             },
-            min: 2,
-            max: 10,
+            min: 4,
+            max: 8,
             stepSize: 1,
             showTicks: true,
             showLabels: true,
