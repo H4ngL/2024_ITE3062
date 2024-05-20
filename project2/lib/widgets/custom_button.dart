@@ -6,12 +6,14 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.size = const Size(294, 50),
+    this.size = const Size(295, 50),
+    this.color = ColorStyles.pointColor,
   });
 
   final String text;
   final VoidCallback onPressed;
   final Size size;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(size),
-        backgroundColor: MaterialStateProperty.all(ColorStyles.pointColor),
+        backgroundColor: MaterialStateProperty.all(color),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

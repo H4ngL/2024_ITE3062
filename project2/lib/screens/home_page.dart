@@ -9,13 +9,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              // '나는 얼마나 잘\n따라 그릴까?',
               '나는 의도대로\n잘 그리고 있을까?',
               style: TextStyle(
                 fontSize: 32,
@@ -67,10 +67,15 @@ class HomePage extends StatelessWidget {
             CustomButton(
               text: "시작하기",
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PreSurveyPage()));
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const PreSurveyPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
+                            child,
+                  ),
+                );
               },
             ),
           ],

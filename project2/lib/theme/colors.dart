@@ -7,4 +7,5 @@ class ColorStyles {
   static const Color grey1 = Color(0xFFB2B5B9);
   static const Color grey2 = Color(0xFF949698);
   static const Color pointColor = Color(0xFF68E1FD);
+  static const Color darkPointColor = Color(0xFF00B2FF);
 }
