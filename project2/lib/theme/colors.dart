@@ -8,4 +8,5 @@ class ColorStyles {
   static const Color grey2 = Color(0xFF949698);
   static const Color pointColor = Color(0xFF68E1FD);
   static const Color darkPointColor = Color(0xFF00B2FF);
+  static const Color negativeColor = Color(0xFFFF6B6B);
 }
