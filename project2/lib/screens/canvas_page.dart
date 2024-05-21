@@ -4,8 +4,37 @@ import 'package:project2/theme/colors.dart';
 import 'package:project2/widgets/custom_button.dart';
 import 'package:project2/widgets/custom_canvas.dart';
 
+const int maxIndex = 8;
+
+List description = [
+  '아래 네모칸의 "고양이"를\n따라 그려주세요',
+  '아래 네모칸의 "나무"를\n따라 그려주세요',
+  '아래 네모칸의 "사람"을\n따라 그려주세요',
+  '아래 네모칸의 "하트"를\n따라 그려주세요',
+  '아래 네모칸의 숫자 "5"를\n따라 적어주세요',
+  '아래 네모칸의 알파벳 "A"를\n따라 적어주세요',
+  '아래 네모칸의 글자 "한"을\n따라 적어주세요',
+  '아래 네모칸의 한자 "愛"를\n따라 적어주세요',
+];
+
+List subDescription = [
+  '꽁꽁 얼어버린 한강 위로',
+  '이번엔 나무를 따라 그려봅시다',
+  '이건 사람입니다',
+  '하트를 따라 그려봅시다',
+  '이번에는 숫자 5를 적어봅시다',
+  '이제 별로 안 남았어요!',
+  '글자 "한"을 적어봅시다',
+  '마지막입니다!',
+];
+
 class CanvasPage extends StatelessWidget {
-  const CanvasPage({super.key});
+  const CanvasPage({
+    super.key,
+    required this.index,
+  });
+
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +46,18 @@ class CanvasPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                '< 1 / 9 >',
-                style: TextStyle(
+              Text(
+                '< $index / $maxIndex >',
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              const Text(
-                '아래 네모칸의 "고양이"를\n따라 그려주세요',
-                style: TextStyle(
+              Text(
+                description[index - 1],
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: ColorStyles.grey2,
@@ -36,33 +65,69 @@ class CanvasPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              const Text(
-                '귀여운 고양이입니다',
-                style: TextStyle(
+              Text(
+                subDescription[index - 1],
+                style: const TextStyle(
                   fontSize: 16,
                   color: ColorStyles.darkPointColor,
                 ),
               ),
               const SizedBox(height: 20),
-              const CustomCanvas(
-                size: Size(295, 381),
-              ),
+              CustomCanvas(
+                  size: const Size(295, 381),
+                  child: (index < 4)
+                      ? Center(
+                          child: Opacity(
+                            opacity: 0.2,
+                            child: Image.asset(
+                              'assets/images/canvas_$index.png',
+                              width: 200,
+                              height: 200,
+                            ),
+                          ),
+                        )
+                      : Center(
+                          child: Opacity(
+                            opacity: 0.2,
+                            child: Image.asset(
+                              'assets/images/canvas_1.png',
+                              width: 200,
+                              height: 200,
+                            ),
+                          ),
+                        )),
               const SizedBox(height: 20),
-              CustomButton(
-                text: '다음으로',
-                onPressed: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const EndPage(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) =>
-                              child,
-                    ),
-                  );
-                },
-                color: ColorStyles.grey0,
-              ),
+              if (index != maxIndex)
+                CustomButton(
+                  text: '다음으로',
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            CanvasPage(index: index + 1),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) =>
+                                child,
+                      ),
+                    );
+                  },
+                  color: ColorStyles.grey0,
+                )
+              else
+                CustomButton(
+                  text: '제출하기',
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const EndPage(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) =>
+                                child,
+                      ),
+                    );
+                  },
+                )
             ],
           ),
         ),

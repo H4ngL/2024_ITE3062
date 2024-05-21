@@ -62,12 +62,13 @@ class TutorialPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const CanvasPage(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) =>
-                              child,
-                    ),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const CanvasPage(
+                              index: 1,
+                            ),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) =>
+                                child),
                   );
                 },
                 color: ColorStyles.grey0,
