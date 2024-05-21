@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project2/screens/end_page.dart';
 import 'package:project2/theme/colors.dart';
 import 'package:project2/widgets/custom_button.dart';
+import 'package:project2/widgets/custom_canvas.dart';
 
 class CanvasPage extends StatelessWidget {
   const CanvasPage({super.key});
@@ -43,16 +44,8 @@ class CanvasPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                width: 295,
-                height: 381,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: ColorStyles.grey0,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              const CustomCanvas(
+                size: Size(295, 381),
               ),
               const SizedBox(height: 20),
               CustomButton(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project2/screens/canvas_page.dart';
 import 'package:project2/theme/colors.dart';
 import 'package:project2/widgets/custom_button.dart';
+import 'package:project2/widgets/custom_canvas.dart';
 
 class TutorialPage extends StatelessWidget {
   const TutorialPage({super.key});
@@ -43,15 +44,16 @@ class TutorialPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                width: 295,
-                height: 381,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: ColorStyles.grey0,
-                    width: 1,
+              const CustomCanvas(
+                size: Size(295, 381),
+                child: Center(
+                  child: Text(
+                    '여기에 그림을 그려보세요',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: ColorStyles.grey1,
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               const SizedBox(height: 20),

@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Text(
-                    '해당 설문은 캔버스 성능 향상을\n목적으로 진행됩니다',
+                    '해당 테스트는 캔버스 성능 향상을\n목적으로 진행됩니다',
                     style: TextStyle(
                       fontSize: 20,
                       color: ColorStyles.grey1,
