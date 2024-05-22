@@ -47,10 +47,9 @@ class CustomCanvasState extends State<CustomCanvas> {
     return Stack(
       children: [
         if (widget.child != null)
-          Container(
+          SizedBox(
             width: widget.size.width,
             height: widget.size.height,
-            color: Colors.white,
             child: widget.child!,
           ),
         GestureDetector(
@@ -99,7 +98,7 @@ class _DrawingPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = Colors.black
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 5.0;
+      ..strokeWidth = 8.0;
 
     Rect clipRect = Rect.fromLTWH(0, 0, size.width, size.height);
     canvas.clipRect(clipRect);

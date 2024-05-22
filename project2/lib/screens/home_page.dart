@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                '나는 얼마나 잘\n따라 있을까?',
+                '나는 얼마나 잘\n따라 그릴까?',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
