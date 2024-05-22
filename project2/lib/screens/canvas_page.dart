@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'dart:ui' as ui;
 import 'package:project2/model/submit_info.dart';
 import 'package:project2/screens/end_page.dart';
 import 'package:project2/service/storage.dart';
@@ -22,7 +20,7 @@ class CanvasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey canvasKey = GlobalKey();
+    final GlobalKey<CustomCanvasState> canvasKey = GlobalKey();
 
     return Scaffold(
       body: Padding(
@@ -60,52 +58,39 @@ class CanvasPage extends StatelessWidget {
               ),
               const SizedBox(height: 35),
               CustomCanvas(
-                  canvasKey: canvasKey,
-                  size: const Size(300, 300),
-                  child: (index < 4)
-                      ? Center(
-                          child: Opacity(
-                            opacity: 0.2,
-                            child: Image.asset(
-                              'assets/images/canvas_$index.png',
-                              width: 200,
-                              height: 200,
-                            ),
-                          ),
-                        )
-                      : Center(
-                          child: Opacity(
-                            opacity: 0.2,
-                            child: Image.asset(
-                              'assets/images/canvas_1.png',
-                              width: 200,
-                              height: 200,
-                            ),
-                          ),
-                        )),
+                key: canvasKey,
+                info: info,
+                size: const Size(300, 300),
+                child: Center(
+                  child: Opacity(
+                    opacity: 0.2,
+                    child: Image.asset(
+                      'assets/images/canvas_1.png',
+                      width: 200,
+                      height: 200,
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 46),
               if (index != maxIndex)
                 CustomButton(
                   text: '다음으로',
                   onPressed: () async {
-                    RenderRepaintBoundary boundary = canvasKey.currentContext!
-                        .findRenderObject() as RenderRepaintBoundary;
-                    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-                    image
-                        .toByteData(format: ui.ImageByteFormat.png)
-                        .then((byteData) {
-                      info.addDrawImage(byteData!.buffer.asUint8List());
-                      Navigator.of(context).push(
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  CanvasPage(index: index + 1, info: info),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) =>
-                                  child,
-                        ),
-                      );
-                    });
+                    await canvasKey.currentState!.handleSavePressed().then(
+                      (value) {
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    CanvasPage(index: index + 1, info: info),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                child,
+                          ),
+                        );
+                      },
+                    );
                   },
                   color: ColorStyles.grey0,
                 )
@@ -113,26 +98,21 @@ class CanvasPage extends StatelessWidget {
                 CustomButton(
                   text: '제출하기',
                   onPressed: () async {
-                    RenderRepaintBoundary boundary = canvasKey.currentContext!
-                        .findRenderObject() as RenderRepaintBoundary;
-                    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-                    image
-                        .toByteData(format: ui.ImageByteFormat.png)
-                        .then((byteData) {
-                      info.addDrawImage(byteData!.buffer.asUint8List());
-                      info.printInfo();
-                      StorageService.saveImages(info);
-                      Navigator.of(context).push(
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  const EndPage(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) =>
-                                  child,
-                        ),
-                      );
-                    });
+                    await canvasKey.currentState!.handleSavePressed().then(
+                      (value) {
+                        StorageService.saveImages(info);
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const EndPage(),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                child,
+                          ),
+                        );
+                      },
+                    );
                   },
                 )
             ],

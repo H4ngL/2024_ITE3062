@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project2/model/submit_info.dart';
 import 'package:project2/theme/colors.dart';
 import 'dart:ui' as ui;
 
@@ -6,20 +7,40 @@ class CustomCanvas extends StatefulWidget {
   const CustomCanvas({
     super.key,
     required this.size,
-    this.canvasKey,
+    required this.info,
     this.child,
   });
 
   final Size size;
   final Widget? child;
-  final GlobalKey? canvasKey;
+  final SubmitInfo info;
 
   @override
-  State<CustomCanvas> createState() => _CustomCanvasState();
+  State<CustomCanvas> createState() => CustomCanvasState();
 }
 
-class _CustomCanvasState extends State<CustomCanvas> {
+class CustomCanvasState extends State<CustomCanvas> {
   List<Offset> points = [];
+
+  Future<void> handleSavePressed() async {
+    ui.PictureRecorder recorder = ui.PictureRecorder();
+    Canvas canvas = Canvas(recorder);
+    var painter = _DrawingPainter(points);
+    var size = widget.size;
+
+    Paint whitePaint = Paint()..color = Colors.white;
+    canvas.drawPaint(whitePaint);
+
+    painter.paint(canvas, size);
+    ui.Image renderedImage = await recorder
+        .endRecording()
+        .toImage(size.width.floor(), size.height.floor());
+
+    var pngBytes =
+        await renderedImage.toByteData(format: ui.ImageByteFormat.png);
+
+    widget.info.drawImages.add(pngBytes!.buffer.asUint8List());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +66,6 @@ class _CustomCanvasState extends State<CustomCanvas> {
             });
           },
           child: RepaintBoundary(
-            key: widget.canvasKey ?? GlobalKey(),
             child: ClipRect(
               child: Container(
                 width: widget.size.width,
@@ -64,23 +84,6 @@ class _CustomCanvasState extends State<CustomCanvas> {
             ),
           ),
         ),
-        // Positioned(
-        //   right: 10,
-        //   bottom: 10,
-        //   child: ElevatedButton(
-        //     onPressed: () async {
-        //       RenderRepaintBoundary boundary = _key.currentContext!
-        //           .findRenderObject() as RenderRepaintBoundary;
-        //       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-        //       image.toByteData(format: ui.ImageByteFormat.png).then((byteData) {
-        //         FirebaseStorage storage = FirebaseStorage.instance;
-        //         Reference ref = storage.ref().child('canvas.png');
-        //         ref.putData(byteData!.buffer.asUint8List());
-        //       });
-        //     },
-        //     child: const Text("save"),
-        //   ),
-        // ),
       ],
     );
   }

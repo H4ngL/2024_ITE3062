@@ -50,9 +50,10 @@ class TutorialPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 35),
-              const CustomCanvas(
-                size: Size(300, 300),
-                child: Center(
+              CustomCanvas(
+                size: const Size(300, 300),
+                info: info,
+                child: const Center(
                   child: Text(
                     '여기에 그림을 그려보세요',
                     style: TextStyle(

@@ -4,10 +4,10 @@ import 'package:project2/model/submit_info.dart';
 class StorageService {
   static final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  static void saveImages(SubmitInfo info) {
+  static Future<void> saveImages(SubmitInfo info) async {
     for (int i = 0; i < info.drawImages.length; i++) {
       Reference ref = _storage.ref().child('${info.uid}/$i.png');
-      ref.putData(info.drawImages[i]);
+      await ref.putData(info.drawImages[i]);
     }
   }
 }
