@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:project2/model/submit_info.dart';
 import 'package:project2/screens/canvas_page.dart';
 import 'package:project2/theme/colors.dart';
 import 'package:project2/widgets/custom_button.dart';
 import 'package:project2/widgets/custom_canvas.dart';
 
 class TutorialPage extends StatelessWidget {
-  const TutorialPage({super.key});
+  const TutorialPage({
+    super.key,
+    required this.info,
+  });
+
+  final SubmitInfo info;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +69,7 @@ class TutorialPage extends StatelessWidget {
                   Navigator.of(context).push(
                     PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            const CanvasPage(index: 1),
+                            CanvasPage(index: 1, info: info),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) =>
                                 child),

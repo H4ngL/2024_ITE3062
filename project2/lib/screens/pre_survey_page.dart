@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project2/model/submit_info.dart';
 import 'package:project2/screens/tutorial_page.dart';
 import 'package:project2/theme/colors.dart';
 import 'package:project2/widgets/custom_button.dart';
 import 'package:project2/widgets/custom_radio.dart';
+import 'package:uuid/uuid.dart';
 
 class PreSurveyPage extends StatefulWidget {
   const PreSurveyPage({super.key});
@@ -12,6 +14,12 @@ class PreSurveyPage extends StatefulWidget {
 }
 
 class _PreSurveyPageState extends State<PreSurveyPage> {
+  SubmitInfo info = SubmitInfo(
+    uid: const Uuid().v4(),
+    gender: 0,
+    age: 20,
+    phoneDegree: 0,
+  );
   int gender = 0;
   int degree = 0;
 
@@ -47,6 +55,7 @@ class _PreSurveyPageState extends State<PreSurveyPage> {
               SizedBox(
                 height: 395,
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -63,6 +72,7 @@ class _PreSurveyPageState extends State<PreSurveyPage> {
                         onChanged: (value) {
                           setState(() {
                             gender = value!;
+                            info.setGender(value);
                           });
                         },
                       ),
@@ -74,10 +84,13 @@ class _PreSurveyPageState extends State<PreSurveyPage> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        decoration: const InputDecoration(
                           hintText: '나이를 입력해주세요',
                         ),
+                        onChanged: (value) {
+                          info.setAge(int.parse(value));
+                        },
                       ),
                       const SizedBox(height: 20),
                       const Text(
@@ -97,6 +110,7 @@ class _PreSurveyPageState extends State<PreSurveyPage> {
                         onChanged: (value) {
                           setState(() {
                             degree = value!;
+                            info.setPhoneDegree(value * 30);
                           });
                         },
                       ),
@@ -111,7 +125,7 @@ class _PreSurveyPageState extends State<PreSurveyPage> {
                   Navigator.of(context).push(
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const TutorialPage(),
+                          TutorialPage(info: info),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) =>
                               child,

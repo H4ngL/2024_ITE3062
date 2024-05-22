@@ -6,11 +6,13 @@ class CustomCanvas extends StatefulWidget {
   const CustomCanvas({
     super.key,
     required this.size,
+    this.canvasKey,
     this.child,
   });
 
   final Size size;
   final Widget? child;
+  final GlobalKey? canvasKey;
 
   @override
   State<CustomCanvas> createState() => _CustomCanvasState();
@@ -24,9 +26,10 @@ class _CustomCanvasState extends State<CustomCanvas> {
     return Stack(
       children: [
         if (widget.child != null)
-          SizedBox(
+          Container(
             width: widget.size.width,
             height: widget.size.height,
+            color: Colors.white,
             child: widget.child!,
           ),
         GestureDetector(
@@ -41,23 +44,43 @@ class _CustomCanvasState extends State<CustomCanvas> {
               points.add(Offset.zero);
             });
           },
-          child: ClipRect(
-            child: Container(
-              width: widget.size.width,
-              height: widget.size.height,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: ColorStyles.grey0,
-                  width: 1,
+          child: RepaintBoundary(
+            key: widget.canvasKey ?? GlobalKey(),
+            child: ClipRect(
+              child: Container(
+                width: widget.size.width,
+                height: widget.size.height,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: ColorStyles.grey0,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: CustomPaint(
-                painter: _DrawingPainter(points),
+                child: CustomPaint(
+                  painter: _DrawingPainter(points),
+                ),
               ),
             ),
           ),
         ),
+        // Positioned(
+        //   right: 10,
+        //   bottom: 10,
+        //   child: ElevatedButton(
+        //     onPressed: () async {
+        //       RenderRepaintBoundary boundary = _key.currentContext!
+        //           .findRenderObject() as RenderRepaintBoundary;
+        //       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+        //       image.toByteData(format: ui.ImageByteFormat.png).then((byteData) {
+        //         FirebaseStorage storage = FirebaseStorage.instance;
+        //         Reference ref = storage.ref().child('canvas.png');
+        //         ref.putData(byteData!.buffer.asUint8List());
+        //       });
+        //     },
+        //     child: const Text("save"),
+        //   ),
+        // ),
       ],
     );
   }
