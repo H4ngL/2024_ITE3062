@@ -11,7 +11,7 @@ class TutorialPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -43,9 +43,9 @@ class TutorialPage extends StatelessWidget {
                   color: ColorStyles.negativeColor,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 35),
               const CustomCanvas(
-                size: Size(295, 381),
+                size: Size(300, 300),
                 child: Center(
                   child: Text(
                     '여기에 그림을 그려보세요',
@@ -56,16 +56,14 @@ class TutorialPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 46),
               CustomButton(
                 text: '시작하기!',
                 onPressed: () {
                   Navigator.of(context).push(
                     PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            const CanvasPage(
-                              index: 1,
-                            ),
+                            const CanvasPage(index: 1),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) =>
                                 child),

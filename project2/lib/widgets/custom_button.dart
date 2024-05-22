@@ -6,7 +6,7 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.size = const Size(295, 50),
+    this.size = const Size(300, 50),
     this.color = ColorStyles.pointColor,
   });
 

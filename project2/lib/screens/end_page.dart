@@ -7,7 +7,7 @@ class EndPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -18,7 +18,7 @@ List description = [
 ];
 
 List subDescription = [
-  '꽁꽁 얼어버린 한강 위로',
+  '시작해볼까요?',
   '이번엔 나무를 따라 그려봅시다',
   '이건 사람입니다',
   '하트를 따라 그려봅시다',
@@ -40,7 +40,7 @@ class CanvasPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -72,9 +72,9 @@ class CanvasPage extends StatelessWidget {
                   color: ColorStyles.darkPointColor,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 35),
               CustomCanvas(
-                  size: const Size(295, 381),
+                  size: const Size(300, 300),
                   child: (index < 4)
                       ? Center(
                           child: Opacity(
@@ -96,7 +96,7 @@ class CanvasPage extends StatelessWidget {
                             ),
                           ),
                         )),
-              const SizedBox(height: 20),
+              const SizedBox(height: 46),
               if (index != maxIndex)
                 CustomButton(
                   text: '다음으로',
