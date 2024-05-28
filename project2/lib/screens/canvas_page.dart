@@ -7,6 +7,7 @@ import 'package:project2/widgets/custom_button.dart';
 import 'package:project2/widgets/custom_canvas.dart';
 
 const int maxIndex = 10;
+const double pixel = 5;
 
 class CanvasPage extends StatelessWidget {
   const CanvasPage({
@@ -60,6 +61,7 @@ class CanvasPage extends StatelessWidget {
               CustomCanvas(
                 key: canvasKey,
                 info: info,
+                offset: offset[index - 1],
                 size: const Size(300, 300),
                 child: Center(
                   child: Opacity(
@@ -145,4 +147,17 @@ List subDescription = [
   '이제 얼마 안남았어요!',
   '이제 정말 거의 다 왔어요!',
   '마지막입니다!',
+];
+
+List offset = [
+  const Offset(0, 0),
+  const Offset(pixel, 0),
+  const Offset(-pixel, 0),
+  const Offset(0, pixel),
+  const Offset(0, -pixel),
+  const Offset(0, 0),
+  const Offset(pixel, 0),
+  const Offset(-pixel, 0),
+  const Offset(0, pixel),
+  const Offset(0, -pixel),
 ];

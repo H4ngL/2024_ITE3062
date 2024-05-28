@@ -9,11 +9,13 @@ class CustomCanvas extends StatefulWidget {
     required this.size,
     required this.info,
     this.child,
+    this.offset = Offset.zero,
   });
 
   final Size size;
   final Widget? child;
   final SubmitInfo info;
+  final Offset offset;
 
   @override
   State<CustomCanvas> createState() => CustomCanvasState();
@@ -25,7 +27,7 @@ class CustomCanvasState extends State<CustomCanvas> {
   Future<void> handleSavePressed() async {
     ui.PictureRecorder recorder = ui.PictureRecorder();
     Canvas canvas = Canvas(recorder);
-    var painter = _DrawingPainter(points);
+    var painter = _DrawingPainter(points, offset: widget.offset);
     var size = widget.size;
 
     Paint whitePaint = Paint()..color = Colors.white;
@@ -77,7 +79,7 @@ class CustomCanvasState extends State<CustomCanvas> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: CustomPaint(
-                  painter: _DrawingPainter(points),
+                  painter: _DrawingPainter(points, offset: widget.offset),
                 ),
               ),
             ),
@@ -90,8 +92,9 @@ class CustomCanvasState extends State<CustomCanvas> {
 
 class _DrawingPainter extends CustomPainter {
   final List<Offset> points;
+  final Offset offset;
 
-  _DrawingPainter(this.points);
+  _DrawingPainter(this.points, {required this.offset});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -105,9 +108,9 @@ class _DrawingPainter extends CustomPainter {
 
     for (int i = 0; i < points.length - 1; i++) {
       if (points[i] != Offset.zero && points[i + 1] != Offset.zero) {
-        canvas.drawLine(points[i], points[i + 1], paint);
+        canvas.drawLine(points[i] + offset, points[i + 1] + offset, paint);
       } else if (points[i] != Offset.zero && points[i + 1] == Offset.zero) {
-        canvas.drawPoints(ui.PointMode.points, [points[i]], paint);
+        canvas.drawPoints(ui.PointMode.points, [points[i] + offset], paint);
       }
     }
   }
