@@ -67,10 +67,13 @@ class TutorialPage extends StatelessWidget {
               CustomButton(
                 text: '시작하기!',
                 onPressed: () {
+                  List randomOrder = List.from(offsets)..shuffle();
+                  info.setOffsetOrder(randomOrder);
                   Navigator.of(context).push(
                     PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            CanvasPage(index: 1, info: info),
+                            CanvasPage(
+                                index: 1, info: info, offsetOrder: randomOrder),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) =>
                                 child),
@@ -85,3 +88,16 @@ class TutorialPage extends StatelessWidget {
     );
   }
 }
+
+List offsets = [
+  "default",
+  "up",
+  "down",
+  "right",
+  "left",
+  "default",
+  "up",
+  "down",
+  "right",
+  "left",
+];

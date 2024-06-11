@@ -3,6 +3,18 @@ class SubmitInfo {
   int gender;
   int age;
   int phoneDegree;
+  List offsetOrder = [
+    "default",
+    "up",
+    "down",
+    "right",
+    "left",
+    "default",
+    "up",
+    "down",
+    "right",
+    "left",
+  ];
   List drawImages = [];
 
   SubmitInfo({
@@ -22,6 +34,10 @@ class SubmitInfo {
 
   void setPhoneDegree(int phoneDegree) {
     this.phoneDegree = phoneDegree;
+  }
+
+  void setOffsetOrder(List offsetOrder) {
+    this.offsetOrder = offsetOrder;
   }
 
   void addDrawImage(dynamic drawImage) {

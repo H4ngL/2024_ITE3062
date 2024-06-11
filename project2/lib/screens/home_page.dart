@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               const Text(
-                '제시된 이미지를 따라 그리면\n점수를 알려드립니다!',
+                '제시된 이미지를 따라 그리는\n설문조사입니다!',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Text(
-                    '해당 테스트는 캔버스 성능 향상을\n목적으로 진행됩니다',
+                    '해당 설문은 유저의 터치 성향 분석을\n목적으로 진행됩니다',
                     style: TextStyle(
                       fontSize: 20,
                       color: ColorStyles.grey1,

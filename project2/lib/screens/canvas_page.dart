@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project2/model/submit_info.dart';
 import 'package:project2/screens/end_page.dart';
+import 'package:project2/service/firestore.dart';
 import 'package:project2/service/storage.dart';
 import 'package:project2/theme/colors.dart';
 import 'package:project2/widgets/custom_button.dart';
@@ -14,10 +15,12 @@ class CanvasPage extends StatelessWidget {
     super.key,
     required this.index,
     required this.info,
+    required this.offsetOrder,
   });
 
   final int index;
   final SubmitInfo info;
+  final List offsetOrder;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,7 @@ class CanvasPage extends StatelessWidget {
               CustomCanvas(
                 key: canvasKey,
                 info: info,
-                offset: offset[index - 1],
+                offset: offset[offsetOrder[index - 1]]!,
                 size: const Size(300, 300),
                 child: Center(
                   child: Opacity(
@@ -81,9 +84,12 @@ class CanvasPage extends StatelessWidget {
                       (value) {
                         Navigator.of(context).push(
                           PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    CanvasPage(index: index + 1, info: info),
+                            pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                CanvasPage(
+                                    index: index + 1,
+                                    info: info,
+                                    offsetOrder: offsetOrder),
                             transitionsBuilder: (context, animation,
                                     secondaryAnimation, child) =>
                                 child,
@@ -100,6 +106,7 @@ class CanvasPage extends StatelessWidget {
                   onPressed: () async {
                     await canvasKey.currentState!.handleSavePressed().then(
                       (value) {
+                        FirestoreService.submitData(info);
                         StorageService.saveImages(info);
                         Navigator.of(context).push(
                           PageRouteBuilder(
@@ -137,27 +144,22 @@ List description = [
 ];
 
 List subDescription = [
-  '시작해볼까요?',
-  '이번엔 물고기를 따라 그려봅시다',
+  '그린 그림은 분석을 위해 수집됩니다!',
+  '물고기를 따라 그려봅시다',
   '다음은 원입니다!',
   '삼각형입니다',
-  '절반에 다 왔어요!',
-  '다음은 별입니다!',
+  '벌써 절반에 다와가고 있어요!',
+  '다음은 별입니다',
   '이제는 문자를 적어봅시다',
   '이제 얼마 안남았어요!',
   '이제 정말 거의 다 왔어요!',
   '마지막입니다!',
 ];
 
-List offset = [
-  const Offset(0, 0),
-  const Offset(pixel, 0),
-  const Offset(-pixel, 0),
-  const Offset(0, pixel),
-  const Offset(0, -pixel),
-  const Offset(0, 0),
-  const Offset(pixel, 0),
-  const Offset(-pixel, 0),
-  const Offset(0, pixel),
-  const Offset(0, -pixel),
-];
+const offset = {
+  "default": Offset(0, 0),
+  "up": Offset(pixel, 0),
+  "down": Offset(-pixel, 0),
+  "right": Offset(0, pixel),
+  "left": Offset(0, -pixel),
+};
