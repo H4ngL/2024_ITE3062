@@ -5,7 +5,7 @@ import 'package:project1/src/controller/main_type_controller.dart';
 import 'package:project1/src/controller/setting.dart';
 
 class GPTApi {
-  static String apiKey = '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';
+  static String apiKey = 'API_KEY';
 
   static String opacityToHex(double opacity) {
     int alpha = (opacity * 255).round();
